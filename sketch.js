@@ -1,13 +1,20 @@
-let mover;
+
+let movers = [];
 
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  mover = new vehicle(width/2, height/2);
+  
+  for(let i = 0; i < 500; i++) {
+    movers.push(new vehicle(width/2, random(height)));
+  }
 }
 
 function draw() {
   background(0);
-  mover.draw();
-  mover.update();
+  
+  for(let mover of movers){
+    mover.draw();
+    mover.update();
+  }
 }

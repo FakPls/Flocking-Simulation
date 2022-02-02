@@ -1,19 +1,30 @@
 function vehicle(x, y) {
     this.pos = createVector(x, y);
-    this.vel = createVector(1, 0);
-    this.acc = createVector(-0.2, 0.1);
+    this.vel = createVector(random(-1, 1), random(-1, 1));
+    this.acc = createVector();
+    this.maxSpeed = 2;
+    this.maxForce = 0.05;
     this.r = 30;
+    this.pRadius = 100;
 
     vehicle.prototype.update = function() {
+
+        this.applyForce();
         this.edges();
         this.pos.add(this.vel);
         this.vel.add(this.acc);
-        //this.acc.set(0, 0);
+        this.acc.set(0, 0);
         
     }
 
-    vehicle.prototype.applyForce = function(force) {
-        this.acc.add(force);
+    vehicle.prototype.applyForce = function() {
+        let alignment = this.align(movers);
+        let separate = this.separation(movers);
+        let cohesion = this.cohere(movers);
+
+        this.acc.add(alignment);
+        this.acc.add(separate);
+        this.acc.add(cohesion);
     }
 
     vehicle.prototype.draw = function() {
@@ -21,10 +32,78 @@ function vehicle(x, y) {
         push();
         translate(this.pos.x, this.pos.y);
         rotate(this.vel.heading() - PI/2);
-        triangle(this.r/4, 0, -this.r/4, 0, 0, this.r);
-        stroke(255);
+        noStroke();
+        fill(255);
+        circle(0, 0, 1)
+        // triangle(this.r/4, 0, -this.r/4, 0, 0, this.r);
         pop();
         
+    }
+
+    vehicle.prototype.separation = function(vehicles) {
+
+        let steering = createVector();
+        let total = 0;
+
+        for(let mover of vehicles) {
+            let d = dist(this.pos.x, this.pos.y, mover.pos.x, mover.pos.y);
+            if(mover != this && d < this.pRadius) {
+                let diff = p5.Vector.sub(this.pos, mover.pos);
+                diff.div(d*d);
+                steering.add(diff);
+                total++;
+            }
+        }
+        if (total > 0) {
+            steering.div(total);
+            steering.setMag(this.maxSpeed);
+            steering.sub(this.vel);
+            steering.limit(this.maxForce);
+        }
+        return steering;
+    }
+
+    vehicle.prototype.align = function(vehciles) {
+
+        let steering = createVector();
+        let total = 0;
+
+        for(let mover of vehciles) {
+            let d = dist(this.pos.x, this.pos.y, mover.pos.x, mover.pos.y);
+            if(mover != this && d < this.pRadius) {
+                steering.add(mover.vel);
+                total++;
+            }
+        }
+        if(total > 0) {
+            steering.div(total);
+            steering.setMag(this.maxSpeed);
+            steering.sub(this.vel);
+            steering.limit(this.maxForce);
+        }
+        return steering;
+    }
+
+    vehicle.prototype.cohere = function(vehciles) {
+
+        let steering = createVector();
+        let total = 0;
+
+        for(let mover of vehciles) {
+            let d = dist(this.pos.x, this.pos.y, mover.pos.x, mover.pos.y);
+            if(mover != this && d < this.pRadius) {
+                steering.add(mover.pos);
+                total++;
+            }
+        }
+        if(total > 0) {
+            steering.div(total);
+            steering.sub(this.pos);
+            steering.setMag(this.maxSpeed);
+            steering.sub(this.vel);
+            steering.limit(this.maxForce);
+        }
+        return steering;
     }
 
     vehicle.prototype.edges = function() {
