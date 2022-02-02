@@ -2,7 +2,7 @@ let mover;
 
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(windowWidth, windowHeight);
   mover = new vehicle(width/2, height/2);
 }
 

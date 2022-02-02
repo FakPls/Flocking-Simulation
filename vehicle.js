@@ -1,14 +1,14 @@
 function vehicle(x, y) {
     this.pos = createVector(x, y);
     this.vel = createVector(1, 0);
-    this.acc = createVector(0, 0);
+    this.acc = createVector(-0.2, 0.1);
     this.r = 30;
 
     vehicle.prototype.update = function() {
         this.edges();
         this.pos.add(this.vel);
         this.vel.add(this.acc);
-        this.acc.set(0, 0);
+        //this.acc.set(0, 0);
         
     }
 
@@ -23,7 +23,6 @@ function vehicle(x, y) {
         rotate(this.vel.heading() - PI/2);
         triangle(this.r/4, 0, -this.r/4, 0, 0, this.r);
         stroke(255);
-        line(0, 0, this.acc.x*20, this.acc.y*20);
         pop();
         
     }
