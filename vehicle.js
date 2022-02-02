@@ -5,7 +5,7 @@ function vehicle(x, y) {
     this.maxSpeed = 2;
     this.maxForce = 0.05;
     this.r = 30;
-    this.pRadius = 100;
+    this.pRadius = 50;
 
     vehicle.prototype.update = function() {
 
@@ -32,9 +32,13 @@ function vehicle(x, y) {
         push();
         translate(this.pos.x, this.pos.y);
         rotate(this.vel.heading() - PI/2);
+        // noFill();
+        // stroke(255)
+        // circle(0, 0, this.pRadius);
         noStroke();
         fill(255);
         circle(0, 0, 1)
+        
         // triangle(this.r/4, 0, -this.r/4, 0, 0, this.r);
         pop();
         

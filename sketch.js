@@ -5,8 +5,9 @@ let movers = [];
 function setup() {
   createCanvas(windowWidth, windowHeight);
   
+  
   for(let i = 0; i < 500; i++) {
-    movers.push(new vehicle(width/2, random(height)));
+    movers.push(new vehicle(random(width), random(height)));
   }
 }
 
