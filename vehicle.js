@@ -44,6 +44,17 @@ function vehicle(x, y) {
         
     }
 
+    vehicle.prototype.showPer = function() {
+        
+            push();
+            translate(this.pos.x, this.pos.y);
+            noFill();
+            stroke(255)
+            circle(0, 0, this.pRadius);
+            pop();
+        
+    }
+
     vehicle.prototype.separation = function(vehicles) {
 
         let steering = createVector();
