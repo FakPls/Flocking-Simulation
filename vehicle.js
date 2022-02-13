@@ -7,6 +7,10 @@ function vehicle(x, y) {
     this.r = 30;
     this.pRadius = 50;
 
+    vehicle.prototype.setP = function(val) {
+        this.pRadius = val;
+    }
+
     vehicle.prototype.update = function() {
 
         this.applyForce();

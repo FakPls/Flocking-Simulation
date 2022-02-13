@@ -23,6 +23,7 @@ function draw() {
     if(showPerception.checked()) {
       mover.showPer();
     }
+    mover.setP(pVal);
     mover.draw();
     mover.update();
   }
